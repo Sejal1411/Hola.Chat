@@ -1,5 +1,5 @@
 import  CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import  { Grid, IconButton } from '@mui/material';
+import  {  IconButton } from '@mui/material';
 
 const CreateGroups = () => {
   return (

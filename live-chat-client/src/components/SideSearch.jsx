@@ -9,7 +9,7 @@ const SideSearch = () => {
       fullWidth
       placeholder='Search'
       hiddenLabel
-      InputProps={{
+      Input={{
         startAdornment: <Search />,
         className: 'input',
       }}

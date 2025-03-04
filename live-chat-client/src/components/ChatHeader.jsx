@@ -1,12 +1,12 @@
-import { Grid, IconButton, Avatar } from '@mui/material';
+import { Grid2, IconButton, Avatar } from '@mui/material';
 
 const ChatHeader = ({ props }) => {
   return (
-    <Grid container className='chat-header'>
-      <Grid item>
+    <Grid2 container className='chat-header'>
+      <Grid2 item>
         <Avatar className='avatar-medium' />
-      </Grid>
-    </Grid>
+      </Grid2>
+    </Grid2>
   );
 };
 

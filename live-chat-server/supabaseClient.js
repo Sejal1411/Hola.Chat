@@ -4,4 +4,4 @@ const supabaseUrl = 'https://txpqfuabnwptdwfsmjrz.supabase.co';
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export default supabase;
+module.exports = supabase;

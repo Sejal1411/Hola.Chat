@@ -9,7 +9,7 @@ import Groups from './Groups';
 const Main = () => {
   return (
     <main>
-      <SideBar />
+       
       <Outlet />
       {/* <CreateGroups /> */}
       {/* <Welcome /> */}

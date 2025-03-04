@@ -1,22 +1,22 @@
-import { Grid, Avatar } from '@mui/material';
+import { Grid2, Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const Conversation = ({ props }) => {
   const navigate = useNavigate();
 
   return (
-    <Grid container className='conversation' onClick={() => {
+    <Grid2 container className='conversation' onClick={() => {
       navigate("chats");
     }}>
-      <Grid item>
+      <Grid2 item>
         <Avatar className='avatar big' />
-      </Grid>
-      <Grid item>
+      </Grid2>
+      <Grid2 item>
         <p>{props.name}</p>
         <p>{props.lastMessage}</p>
         <p>{props.timeStamp}</p>
-      </Grid>
-    </Grid>
+      </Grid2>
+    </Grid2>
   );
 };
 

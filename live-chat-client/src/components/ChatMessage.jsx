@@ -1,9 +1,10 @@
+import React from 'react';
 import { Send } from '@mui/icons-material';
-import { Grid, IconButton, TextField } from '@mui/material';
+import { Grid2, IconButton, TextField, InputAdornment} from '@mui/material';
 
 const ChatMessage = () => {
   return (
-    <Grid item>
+    <Grid2 item>
       <TextField
         className='chat-send'
         variant='filled'
@@ -12,14 +13,16 @@ const ChatMessage = () => {
         hiddenLabel
         InputProps={{
           endAdornment: (
-            <IconButton>
-              <Send />
-            </IconButton>
+            <InputAdornment position="end">
+              <IconButton>
+                <Send />
+              </IconButton>
+            </InputAdornment>
           ),
           className: 'input',
         }}
       />
-    </Grid>
+    </Grid2>
   );
 };
 

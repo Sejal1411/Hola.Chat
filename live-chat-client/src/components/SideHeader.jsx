@@ -1,4 +1,4 @@
-import { Grid, Avatar, ButtonGroup, IconButton } from '@mui/material';
+import {  Avatar, ButtonGroup, IconButton, Grid2 } from '@mui/material';
 import {
   DarkMode,
   PersonAddAlt1,
@@ -13,12 +13,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const SideHeader = () => {
  const navigate =  useNavigate();
- const dispatch =  useDispatch();
+//  const dispatch =  useDispatch();
  const [lightTheme, setLightTheme] = useState(true);
 useSelector((state) => state.themeKey);
 
   return (
-    <Grid container className={'side-header' + (lightTheme ?"" : " dark")}>
+    <Grid2 container className={'side-header' + (lightTheme ?"" : " dark")}>
       <Avatar className='avatar' />
       <ButtonGroup>
 
@@ -50,7 +50,7 @@ useSelector((state) => state.themeKey);
         </IconButton>
 
       </ButtonGroup>
-    </Grid>
+    </Grid2>
   );
 };
 
