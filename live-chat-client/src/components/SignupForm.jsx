@@ -60,10 +60,11 @@ const SignupForm = ({ setShowLogin }) => {
       setSignInStatus({ msg: "Success", key: Math.random() });
       navigate("/app/welcome");
       localStorage.setItem("userData", JSON.stringify(response.data));
+
     } catch (error) {
-      console.error("Error response:", error.response); // Log the error response
+      console.error("Error response:", error); 
+
       if (error.response) {
-        // Handles cases where a response was received
         const status = error.response.status;
         const message =
           status === 405
@@ -71,13 +72,16 @@ const SignupForm = ({ setShowLogin }) => {
             : status === 406
             ? "User Name already Taken, Please take another one"
             : `Error: ${error.response.data.message || "Something went wrong"}`;
+
         setSignInStatus({ msg: message, key: Math.random() });
+
       } else if (error.request) {
         // Handles cases where the request was made, but no response was received
         setSignInStatus({
           msg: "No response from server. Please try again later.",
           key: Math.random(),
         });
+
       } else {
         // Handles other unexpected errors
         setSignInStatus({
@@ -89,6 +93,19 @@ const SignupForm = ({ setShowLogin }) => {
       setLoading(false);
     }
   };
+  
+  const renderPasswordVisibilityIcon = (show, handleClick) => (
+    <InputAdornment position="end">
+      <IconButton
+        aria-label="toggle password visibility"
+        onClick={handleClick}
+        edge="end"
+      >
+        {show ? <VisibilityOff /> : <Visibility />}
+      </IconButton>
+    </InputAdornment>
+  );
+
 
   return (
     <>
@@ -100,6 +117,7 @@ const SignupForm = ({ setShowLogin }) => {
       </Backdrop>
       <div className="login-box">
         <p className="login-text">Create your Account</p>
+
         <TextField
           onChange={changeHandler}
           id="standard-basic"
@@ -107,7 +125,6 @@ const SignupForm = ({ setShowLogin }) => {
           variant="outlined"
           color="secondary"
           name="name"
-          helperText=""
           onKeyDown={(event) => {
             if (event.code === "Enter") {
               signUpHandler();
@@ -116,7 +133,7 @@ const SignupForm = ({ setShowLogin }) => {
         />
         <TextField
           onChange={changeHandler}
-          id="standard-basic"
+          // id="standard-basic"
           label="Enter Email Address"
           variant="outlined"
           color="secondary"
@@ -141,17 +158,7 @@ const SignupForm = ({ setShowLogin }) => {
             }
           }}
           InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
+            endAdornment: renderPasswordVisibilityIcon(showPassword, handleClickShowPassword),
           }}
         />
         <TextField
@@ -168,19 +175,10 @@ const SignupForm = ({ setShowLogin }) => {
             }
           }}
           InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle confirm password visibility"
-                  onClick={handleClickShowConfirmPassword}
-                  edge="end"
-                >
-                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
+            endAdornment: renderPasswordVisibilityIcon(showConfirmPassword, handleClickShowConfirmPassword),
           }}
         />
+
         <Button
           variant="outlined"
           color="secondary"
@@ -189,6 +187,7 @@ const SignupForm = ({ setShowLogin }) => {
         >
           Sign Up
         </Button>
+
         <p>
           Already have an Account?{" "}
           <span
@@ -200,6 +199,7 @@ const SignupForm = ({ setShowLogin }) => {
             Log in
           </span>
         </p>
+
         {signInStatus && (
           <Toaster key={signInStatus.key} message={signInStatus.msg} />
         )}
