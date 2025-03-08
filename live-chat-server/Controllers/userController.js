@@ -36,7 +36,7 @@ const registerController = expressAsyncHandler(async (req, res) => {
   if (user) {
     res.status(201).json({
       _id: user._id,
-      name: user.name,
+      name: user.name,  
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),

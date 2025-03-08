@@ -52,7 +52,7 @@ const SignupForm = ({ setShowLogin }) => {
       console.log("Sending data:", JSON.stringify(data)); // Log the request payload
 
       const response = await axios.post(
-        "http://localhost:8000/user/register/",
+        "http://localhost:8000/user/signup/",
         data,
         config
       );
