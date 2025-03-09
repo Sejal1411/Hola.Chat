@@ -5,17 +5,7 @@ const generateToken = require('../Config/generateToken');
 const registerController = expressAsyncHandler(async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
 
-  // Check for all fields
-  if (!name || !email || !password || !confirmPassword) {
-    res.status(400);
-    throw new Error('All necessary input fields have not been filled');
-  }
 
-  // Check if passwords match
-  if (password !== confirmPassword) {
-    res.status(400);
-    throw new Error('Passwords do not match');
-  }
 
   // Check for pre-existing user
   const userExist = await UserModel.findOne({ email });
