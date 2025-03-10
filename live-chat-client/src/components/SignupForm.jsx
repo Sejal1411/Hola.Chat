@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Backdrop, Button, CircularProgress, TextField, InputAdornment, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
@@ -13,8 +13,20 @@ const SignupForm = ({ setShowLogin }) => {
   const [signInStatus, setSignInStatus] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  
   const navigate = useNavigate();
+
+  // Track sign-in status changes and hide status message after 3 seconds
+  useEffect(() => {
+    if (signInStatus) {
+      const timer = setTimeout(() => {
+        setSignInStatus(""); // Clear the sign-in status after 3 seconds
+      }, 3000);
+
+      // Cleanup timer if signInStatus changes before 3 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [signInStatus]);
 
   const changeHandler = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -32,58 +44,48 @@ const SignupForm = ({ setShowLogin }) => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+  const validateEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); // Regex for email validation
+  };
+
   const signUpHandler = async () => {
+    if (!validateEmail(data.email)) {
+      setSignInStatus({ msg: "Invalid email format!", key: Math.random() });
+      return;
+    }
+
     if (data.password !== confirmPassword) {
-      setSignInStatus({
-        msg: "Password and Confirm Password do not match",
-        key: Math.random(),
-      });
+      setSignInStatus({ msg: "Passwords do not match!", key: Math.random() });
       return;
     }
 
     setLoading(true);
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
-
-      console.log("Sending data:", JSON.stringify(data)); // Log the request payload
+      const config = { headers: { "Content-type": "application/json" } };
 
       const response = await axios.post(
-        "http://localhost:8000/user/signup/",
+        "http://localhost:8000/user/signup/", // Updated URL
         data,
         config
       );
 
       setSignInStatus({ msg: "Success", key: Math.random() });
-      navigate("/app/welcome");
       localStorage.setItem("userData", JSON.stringify(response.data));
-
+      navigate("/app/welcome");
     } catch (error) {
-      console.error("Error response:", error); 
+      console.error("Signup error:", error);
 
       if (error.response) {
-        const status = error.response.status;
-        const message =
-          status === 405
-            ? "User with this email ID already Exists"
-            : status === 406
-            ? "User Name already Taken, Please take another one"
-            : `Error: ${error.response.data.message || "Something went wrong"}`;
-
-        setSignInStatus({ msg: message, key: Math.random() });
-
-      } else if (error.request) {
-        // Handles cases where the request was made, but no response was received
         setSignInStatus({
-          msg: "No response from server. Please try again later.",
+          msg: error.response.data.message || "Signup failed!",
           key: Math.random(),
         });
-
+      } else if (error.request) {
+        setSignInStatus({
+          msg: "No response from server. Try again!",
+          key: Math.random(),
+        });
       } else {
-        // Handles other unexpected errors
         setSignInStatus({
           msg: `Error: ${error.message}`,
           key: Math.random(),
@@ -93,7 +95,7 @@ const SignupForm = ({ setShowLogin }) => {
       setLoading(false);
     }
   };
-  
+
   const renderPasswordVisibilityIcon = (show, handleClick) => (
     <InputAdornment position="end">
       <IconButton
@@ -106,7 +108,6 @@ const SignupForm = ({ setShowLogin }) => {
     </InputAdornment>
   );
 
-
   return (
     <>
       <Backdrop
@@ -115,65 +116,45 @@ const SignupForm = ({ setShowLogin }) => {
       >
         <CircularProgress color="secondary" />
       </Backdrop>
+      
       <div className="login-box">
         <p className="login-text">Create your Account</p>
 
         <TextField
+          required
           onChange={changeHandler}
-          id="standard-basic"
           label="Enter User Name"
           variant="outlined"
           color="secondary"
           name="name"
-          onKeyDown={(event) => {
-            if (event.code === "Enter") {
-              signUpHandler();
-            }
-          }}
         />
         <TextField
+          required
           onChange={changeHandler}
-          // id="standard-basic"
           label="Enter Email Address"
           variant="outlined"
           color="secondary"
           name="email"
-          onKeyDown={(event) => {
-            if (event.code === "Enter") {
-              signUpHandler();
-            }
-          }}
         />
         <TextField
+          required
           onChange={changeHandler}
-          id="outlined-password-input"
           label="Password"
           type={showPassword ? "text" : "password"}
-          autoComplete="current-password"
+          autoComplete="new-password"
           color="secondary"
           name="password"
-          onKeyDown={(event) => {
-            if (event.code === "Enter") {
-              signUpHandler();
-            }
-          }}
           InputProps={{
             endAdornment: renderPasswordVisibilityIcon(showPassword, handleClickShowPassword),
           }}
         />
         <TextField
+          required
           onChange={confirmPasswordHandler}
-          id="outlined-confirm-password-input"
           label="Confirm Password"
           type={showConfirmPassword ? "text" : "password"}
-          autoComplete="current-password"
+          autoComplete="new-password"
           color="secondary"
-          name="confirmPassword"
-          onKeyDown={(event) => {
-            if (event.code === "Enter") {
-              signUpHandler();
-            }
-          }}
           InputProps={{
             endAdornment: renderPasswordVisibilityIcon(showConfirmPassword, handleClickShowConfirmPassword),
           }}
@@ -192,17 +173,13 @@ const SignupForm = ({ setShowLogin }) => {
           Already have an Account?{" "}
           <span
             className="hyper"
-            onClick={() => {
-              setShowLogin(true);
-            }}
+            onClick={() => setShowLogin(true)}
           >
             Log in
           </span>
         </p>
 
-        {signInStatus && (
-          <Toaster key={signInStatus.key} message={signInStatus.msg} />
-        )}
+        {signInStatus && <Toaster key={signInStatus.key} message={signInStatus.msg} />}
       </div>
     </>
   );
