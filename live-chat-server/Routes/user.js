@@ -6,7 +6,7 @@ const {generateToken} = require('../Config/generateToken');
 router.post('/signup', async (req, res) => {
     const { name, email, password, confirmPassword } = req.body;
   
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !email || !password) {
       return res.status(400).json({ error: 'Fill all the required fields' });
     }
   
