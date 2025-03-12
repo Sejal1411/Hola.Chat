@@ -7,7 +7,7 @@ import Toaster from "./Toaster";
 import "../index.css"; // Import the CSS file
 
 const SignupForm = ({ setShowLogin }) => {
-  const [data, setData] = useState({ name: "", email: "", password: "" });
+  const [data, setData] = useState({ name: "", email: "", password: ""});
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [signInStatus, setSignInStatus] = useState(null);
@@ -35,8 +35,13 @@ const SignupForm = ({ setShowLogin }) => {
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const signUpHandler = async () => {
-    if (!data.name || !data.email || !data.password) {
+    if (!data.name || !data.email || !data.password || !confirmPassword) {
       setSignInStatus({ msg: "All fields are required!", key: Math.random() });
+      return;
+    }
+
+    if (data.password !== confirmPassword) {
+      setSignInStatus({ msg: "Passwords do not match!", key: Math.random() });
       return;
     }
 
@@ -50,15 +55,11 @@ const SignupForm = ({ setShowLogin }) => {
       return;
     }
 
-    if (data.password !== confirmPassword) {
-      setSignInStatus({ msg: "Passwords do not match!", key: Math.random() });
-      return;
-    }
-
     const payload = {
       name: data.name,
       email: data.email,
       password: data.password,
+      confirmPassword: confirmPassword,
     };
   
     console.log("Data being sent to backend:", payload);
@@ -66,7 +67,7 @@ const SignupForm = ({ setShowLogin }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:8000/user/signup/", data);
+      const response = await axios.post("http://localhost:8000/user/signup/", payload);
     
       setSignInStatus({ msg: "Success! Redirecting...", key: Math.random() });
       localStorage.setItem("token", response.data.token);
