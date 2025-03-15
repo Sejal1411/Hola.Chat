@@ -70,7 +70,7 @@ const LoginForm = ({ setShowLogin }) => {
         <TextField
           required
           onChange={changeHandler}
-          label="Enter Username"
+          label="Enter Email"
           variant="outlined"
           color="secondary"
           name="email"

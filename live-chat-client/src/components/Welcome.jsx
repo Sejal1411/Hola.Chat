@@ -1,29 +1,31 @@
 // import logo from "/hello.png";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import ChatArea from "./ChatArea";
+import Conversation from "./Conversation";
+import "../index.css";
 
 function Welcome() {
-  const lightTheme = useSelector((state) => state.themeKey);
   const userData = JSON.parse(localStorage.getItem("userData"));
   console.log(userData);
-  const nav = useNavigate();
+
+  const navigate = useNavigate();
   if (!userData) {
     console.log("User not Authenticated");
-    nav("/");
+    navigate("/");
   }
 
   return (
-    <div className={"welcome-container" + (lightTheme ? "" : " dark")}>
-      <motion.img
-        drag
-        whileTap={{ scale: 1.05, rotate: 360 }}
-        // src={logo}
-        alt="Logo"
-        className="welcome-logo"
-      />
-      <b>Hi , {userData.data.name} 👋</b>
-      <p>View and text directly to people present in the chat Rooms.</p>
+    <div className="welcome-container">
+      <div className="chat-container">
+        <Conversation />
+        <ChatArea />
+      </div>
+      <div className="welcome-message">
+        <b>Hi, {userData.name} 👋</b>
+        <p>View and text directly to people present in the chat Rooms.</p>
+      </div>
     </div>
   );
 }

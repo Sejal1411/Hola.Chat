@@ -103,7 +103,7 @@ const SignupForm = ({ setShowLogin }) => {
         <TextField 
           required 
           onChange={changeHandler} 
-          label="Enter User Name" 
+          label="Enter Your Name" 
           variant="outlined" 
           color="secondary" 
           name="name" 
